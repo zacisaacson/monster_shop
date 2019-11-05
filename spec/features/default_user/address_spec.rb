@@ -133,4 +133,16 @@ RSpec.describe 'As a default user' do
 
     expect(page).to have_content("Nickname can't be blank\nCity can't be blank")
   end
+
+  it "can delete an address" do
+    visit '/profile/addresses'
+
+    within "#addresses-#{@work.id}" do
+      click_link 'Delete Address'
+    end
+
+    expect(current_path).to eq('/profile/addresses')
+
+    expect(page).to_not have_content('Work')
+  end
 end

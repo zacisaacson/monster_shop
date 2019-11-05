@@ -31,6 +31,12 @@ class AddressesController < ApplicationController
       render :edit
     end
   end
+
+  def destroy
+    Address.destroy(params[:id])
+    redirect_to '/profile/addresses'
+  end
+
 private
 
   def address_params

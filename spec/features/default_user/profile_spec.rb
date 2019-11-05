@@ -3,6 +3,7 @@ require 'rails_helper'
 RSpec.describe 'As a default user' do
   before :each do
     @user = User.create!(name: "Gmoney", address: "123 Lincoln St", city: "Denver", state: "CO", zip: 23840, email: "test@gmail.com", password: "password123", password_confirmation: "password123")
+    @user.addresses.create!(nickname: "Work" , address: "456 W Broadway St", city: "Denver" , state: "CO", zip: 89043 )
 
     visit '/login'
 

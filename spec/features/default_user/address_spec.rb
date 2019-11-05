@@ -2,7 +2,7 @@ require 'rails_helper'
 
 RSpec.describe 'As a default user' do
   before :each do
-    @user = User.create!(name: "Gmoney", address: "123 Lincoln St", city: "Denver", state: "CO", zip: 23840, email: "test@gmail.com", password: "password123", password_confirmation: "password123")
+    @user = User.create!(name: "Gmoney", email: "test@gmail.com", password: "password123", password_confirmation: "password123")
     @work = @user.addresses.create!(nickname: "Work" , address: "456 W Broadway St", city: "Denver" , state: "CO", zip: 89043 )
     @home = @user.addresses.create!(nickname: "Home" , address: "400 Washington St", city: "Denver" , state: "CO", zip: 89233 )
     @parents = @user.addresses.create!(nickname: "Parents" , address: "4739 N Wilshire Dr", city: "Phoenix" , state: "AZ", zip: 84839 )

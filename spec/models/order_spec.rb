@@ -19,7 +19,7 @@ describe Order, type: :model do
       @tire = @meg.items.create(name: "Gatorskins", description: "They'll never pop!", price: 100, image: "https://www.rei.com/media/4e1f5b05-27ef-4267-bb9a-14e35935f218?size=784x588", inventory: 12)
       @pull_toy = @brian.items.create(name: "Pull Toy", description: "Great pull toy!", price: 10, image: "http://lovencaretoys.com/image/cache/dog/tug-toy-dog-pull-9010_2-800x800.jpg", inventory: 32)
 
-      @user = User.create!(name: "Gmoney", address: "123 Lincoln St", city: "Denver", state: "CO", zip: 23840, email: "test@gmail.com", password: "password123", password_confirmation: "password123")
+      @user = User.create!(name: "Gmoney", email: "test@gmail.com", password: "password123", password_confirmation: "password123")
       @order_1 = Order.create!(user_id: @user.id)
 
       @order_1.item_orders.create!(item: @tire, price: @tire.price, quantity: 2)
@@ -37,7 +37,7 @@ describe Order, type: :model do
 
   describe 'status' do
     before :each do
-      @user = User.create!(name: "Gmoney", address: "123 Lincoln St", city: "Denver", state: "CO", zip: 23840, email: "test@gmail.com", password: "password123", password_confirmation: "password123")
+      @user = User.create!(name: "Gmoney", email: "test@gmail.com", password: "password123", password_confirmation: "password123")
       @order_1 = Order.create!(user_id: @user.id, status: 0)
       @order_2 = Order.create!(user_id: @user.id)
       @order_3 = Order.create!(user_id: @user.id, status: 2)

@@ -38,3 +38,54 @@ RSpec.describe 'As a default user' do
       expect(page).to have_content(89233)
     end
   end
+
+  it "can edit addresses and prepopulate" do
+    visit '/profile/addresses'
+
+    within "#addresses-#{@work.id}" do
+      click_link('Edit Address')
+    end
+
+    expect(current_path).to eq("/profile/addresses/#{@work.id}/edit")
+
+    expect(page).to have_selector("input[value='Work']")
+    expect(page).to have_selector("input[value='456 W Broadway St']")
+    expect(page).to have_selector("input[value='Denver']")
+    expect(page).to have_selector("input[value='CO']")
+    expect(page).to have_selector("input[value='89043']")
+
+    fill_in :nickname, with: 'No Where'
+    fill_in :address, with: '3432 W 3rd Ave'
+    fill_in :city, with: 'Aurora'
+    fill_in :state, with: 'CO'
+    fill_in :zip, with: 83940
+
+    click_button('Update Address')
+
+    expect(current_path).to eq('/profile/addresses')
+
+    within "#addresses-#{@work.id}" do
+      expect(page).to have_content('No Where')
+      expect(page).to have_content('432 W 3rd Ave')
+      expect(page).to have_content('Aurora')
+      expect(page).to have_content('CO')
+      expect(page).to have_content(83940)
+    end
+  end
+
+  it "will show flash message and redirect if form not filled out properly" do
+
+    visit "/profile/addresses/#{@work.id}/edit"
+
+    fill_in :nickname, with: ''
+    fill_in :address, with: '3432 W 3rd Ave'
+    fill_in :city, with: 'Aurora'
+    fill_in :state, with: 'CO'
+    fill_in :zip, with: 83940
+
+    click_button('Update Address')
+
+    expect(current_path).to eq("/profile/addresses/#{@work.id}")
+
+    expect(page).to have_content("Nickname can't be blank")
+  end

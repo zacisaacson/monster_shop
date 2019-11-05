@@ -1,0 +1,13 @@
+<h1 class="mt-4 mb-2">Edit Address</h1>
+
+<%= render partial: "partials/address_form", locals:
+  {
+    path: "/profile/addresses/#{@address.id}",
+    method: :patch,
+    nickname: @address.nickname,
+    address: @address.address,
+    city: @address.city,
+    state: @address.state,
+    zip: @address.zip,
+    button_text: 'Update Address'
+  } %>

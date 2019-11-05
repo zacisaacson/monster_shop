@@ -31,6 +31,8 @@ Rails.application.routes.draw do
   patch '/profile/orders/:id', to: 'user_orders#update'
 
   get '/profile/addresses', to: 'addresses#index'
+  get '/profile/addresses/:id/edit', to: 'addresses#edit'
+  patch '/profile/addresses/:id', to: 'addresses#update'
   get '/login', to: 'sessions#new'
   post '/login', to: 'sessions#create'
   get '/logout', to: 'sessions#destroy'

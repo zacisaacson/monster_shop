@@ -89,3 +89,48 @@ RSpec.describe 'As a default user' do
 
     expect(page).to have_content("Nickname can't be blank")
   end
+
+  it "can create a new address" do
+    visit '/profile/addresses'
+
+    click_link "Add New Address"
+
+    expect(current_path).to eq("/profile/addresses/new")
+
+    fill_in :nickname, with: 'Somewhere'
+    fill_in :address, with: '9872 Lake St'
+    fill_in :city, with: 'Lakewood'
+    fill_in :state, with: 'CO'
+    fill_in :zip, with: 83480
+
+    click_button 'Create Address'
+
+    expect(current_path).to eq('/profile/addresses')
+
+    new_item = Address.last
+
+    within "#addresses-#{new_item.id}" do
+      expect(page).to have_content('Somewhere')
+      expect(page).to have_content('9872 Lake St')
+      expect(page).to have_content('Lakewood')
+      expect(page).to have_content('CO')
+      expect(page).to have_content(83480)
+    end
+  end
+
+  it "will show a flash message and render if form not filled out" do
+    visit '/profile/addresses/new'
+
+    fill_in :nickname, with: ''
+    fill_in :address, with: '9872 Lake St'
+    fill_in :city, with: ''
+    fill_in :state, with: 'CO'
+    fill_in :zip, with: 83480
+
+    click_button 'Create Address'
+
+    expect(current_path).to eq('/profile/addresses')
+
+    expect(page).to have_content("Nickname can't be blank\nCity can't be blank")
+  end
+end

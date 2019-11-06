@@ -3,7 +3,7 @@ require 'rails_helper'
 RSpec.describe "As a merchant employee" do
   it "cannot access certain paths" do
     meg = Merchant.create(name: "Meg's Bike Shop", address: '123 Bike Rd', city: 'Denver', state: 'CO', zip: 80203)
-    employee = meg.users.create!(name: "Gmoney", address: "123 Lincoln St", city: "Denver", state: "CO", zip: 23840, email: "test@gmail.com", password: "password123", password_confirmation: "password123", role: 1)
+    employee = meg.users.create!(name: "Gmoney", email: "test@gmail.com", password: "password123", password_confirmation: "password123", role: 1)
 
     visit '/login'
 

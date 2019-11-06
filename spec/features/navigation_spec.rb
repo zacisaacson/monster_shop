@@ -54,7 +54,7 @@ RSpec.describe 'Site Navigation' do
 
   describe "As a default user" do
     before :each do
-      @user = User.create!(name: "Gmoney", address: "123 Lincoln St", city: "Denver", state: "CO", zip: 23840, email: "test@gmail.com", password: "password123", password_confirmation: "password123")
+      @user = User.create!(name: "Gmoney", email: "test@gmail.com", password: "password123", password_confirmation: "password123")
 
       visit '/login'
 
@@ -113,7 +113,7 @@ RSpec.describe 'Site Navigation' do
   describe "As a merchant employee" do
     before :each do
       @meg = Merchant.create(name: "Meg's Bike Shop", address: '123 Bike Rd', city: 'Denver', state: 'CO', zip: 80203)
-      @employee = @meg.users.create!(name: "Gmoney", address: "123 Lincoln St", city: "Denver", state: "CO", zip: 23840, email: "test@gmail.com", password: "password123", password_confirmation: "password123", role: 1)
+      @employee = @meg.users.create!(name: "Gmoney", email: "test@gmail.com", password: "password123", password_confirmation: "password123", role: 1)
 
       visit '/login'
 
@@ -173,7 +173,7 @@ RSpec.describe 'Site Navigation' do
   describe "As a merchant admin" do
     before :each do
       @meg = Merchant.create(name: "Meg's Bike Shop", address: '123 Bike Rd', city: 'Denver', state: 'CO', zip: 80203)
-      @admin = @meg.users.create!(name: "Gmoney", address: "123 Lincoln St", city: "Denver", state: "CO", zip: 23840, email: "test@gmail.com", password: "password123", password_confirmation: "password123", role: 2)
+      @admin = @meg.users.create!(name: "Gmoney", email: "test@gmail.com", password: "password123", password_confirmation: "password123", role: 2)
 
       visit '/login'
 
@@ -233,7 +233,7 @@ RSpec.describe 'Site Navigation' do
 
   describe "As an admin" do
     before :each do
-      @admin = User.create!(name: "Gmoney", address: "123 Lincoln St", city: "Denver", state: "CO", zip: 23840, email: "test@gmail.com", password: "password123", password_confirmation: "password123", role: 3)
+      @admin = User.create!(name: "Gmoney", email: "test@gmail.com", password: "password123", password_confirmation: "password123", role: 3)
 
       visit '/login'
 
@@ -284,8 +284,4 @@ RSpec.describe 'Site Navigation' do
       within('nav') { expect(page).to have_content("Logged in as Gmoney") }
     end
   end
-
-
-
-
 end

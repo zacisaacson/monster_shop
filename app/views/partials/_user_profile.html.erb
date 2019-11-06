@@ -12,6 +12,10 @@
     <td><%= @user.email %></td>
   </tr>
   <tr>
+    <td>Name</td>
+    <td><%= @user.name %></td>
+  </tr>
+  <tr>
     <td>Address</td>
     <td><%= @user.address %></td>
   </tr>
@@ -36,5 +40,6 @@
   <% if !admin %>
     <%= link_to 'Edit Your Info', '/profile/edit', class: 'btn btn-primary ml-2 mr-2' %>
     <%= link_to 'Change Your Password', '/profile/edit?info=false', class: 'btn btn-danger ml-2 mr-2' %>
+    <%= link_to 'Addresses', '/profile/addresses', class: 'btn btn-success ml-2 mr-2' %>
   <% end %>
 </article>

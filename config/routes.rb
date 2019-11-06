@@ -24,11 +24,19 @@ Rails.application.routes.draw do
   get '/profile', to: 'users#show'
   get '/profile/orders', to: 'user_orders#index'
   get '/profile/orders/:id', to: 'user_orders#show'
+  get '/profile/orders/:address_id/new', to: 'user_orders#new'
   get '/register', to: 'users#new'
   post '/users', to: 'users#create'
   get '/profile/edit', to: 'users#edit'
   patch '/profile', to: 'users#update'
   patch '/profile/orders/:id', to: 'user_orders#update'
+
+  get '/profile/addresses', to: 'addresses#index'
+  get '/profile/addresses/:id/edit', to: 'addresses#edit'
+  patch '/profile/addresses/:id', to: 'addresses#update'
+  get '/profile/addresses/new', to: 'addresses#new'
+  post '/profile/addresses', to: 'addresses#create'
+  delete '/profile/addresses/:id', to: 'addresses#destroy'
 
   get '/login', to: 'sessions#new'
   post '/login', to: 'sessions#create'
@@ -38,7 +46,7 @@ Rails.application.routes.draw do
     resources :items, except: [:show]
 
     root 'dashboard#index'
-    
+
     get '/orders/:id', to: 'orders#show'
     patch '/orders/:order_id/item_orders/:item_order_id', to: 'orders#update'
   end

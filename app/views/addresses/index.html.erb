@@ -1,0 +1,14 @@
+<h1>Addresses</h1>
+<section class="container-fluid row justify-content-center">
+  <% @addresses.each do |address| %>
+    <section class = "card card-body bg-light m-3 p-4 col-md-3" id= 'addresses-<%=address.id%>'>
+      <h3 class="text-center"><%= address.nickname %></h3>
+      <p class="text-center"><%= address.address %></P>
+      <p class="text-center"><%= address.city %> <%= address.state %>, <%= address.zip %><p/>
+      <%= link_to 'Edit Address', "/profile/addresses/#{address.id}/edit", class: 'btn btn-success ml-2 mr-2' %>
+      <%= link_to 'Delete Address', "/profile/addresses/#{address.id}", method: :delete, class: 'btn btn-outline-danger mt-3' %>
+    </section>
+  <% end %>
+</section>
+
+<p align="center"><%= link_to 'Add New Address', "/profile/addresses/new", class: 'btn btn-primary mt-3' %></p>

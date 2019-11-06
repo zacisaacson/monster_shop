@@ -10,6 +10,7 @@ class CartController < ApplicationController
 
   def show
     @items = cart.items
+    @addresses = current_user.addresses if current_user
   end
 
   def empty

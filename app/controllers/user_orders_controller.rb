@@ -14,7 +14,21 @@ class UserOrdersController < ApplicationController
     end
   end
 
+  def edit
+    @order = Order.find(params[:id])
+  end
+
   def update
+    order = Order.find(params[:id])
+    order.update(address_id: params[:address_id])
+      if order.save
+        flash[:success] = ['Your address has been updated']
+        redirect_to '/profile'
+      end
+
+  end
+
+  def cancel
     order = Order.find(params[:id])
     order.update(status: 3)
     order.item_orders.each do |item_order|
@@ -29,8 +43,13 @@ class UserOrdersController < ApplicationController
     redirect_to '/profile'
   end
 
+  def new
+  # binding.pry
+  @address = Address.find(params[:address_id])
+  end
+
   def create
-    order = Order.create(user_id: current_user.id)
+    order = Order.create(user_id: current_user.id, address_id: params[:address_id])
     if cart.contents.any? && order.save
       cart.items.each do |item,quantity|
         order.item_orders.create({
@@ -42,9 +61,6 @@ class UserOrdersController < ApplicationController
       session.delete(:cart)
       flash[:success] = ['Your order has been successfully created!']
       redirect_to '/profile/orders'
-    else
-      flash[:error] = ["Please add something to your cart to place an order"]
-      redirect_to '/items'
     end
   end
 

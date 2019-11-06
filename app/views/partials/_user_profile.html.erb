@@ -11,28 +11,31 @@
     <td>Email</td>
     <td><%= @user.email %></td>
   </tr>
-  <tr>
-    <td>Name</td>
-    <td><%= @user.name %></td>
-  </tr>
-  <tr>
-    <td>Address</td>
-    <td><%= @user.address %></td>
-  </tr>
-  <tr>
-    <td>City</td>
-    <td><%= @user.city %></td>
-  </tr>
-  <tr>
-    <td>State</td>
-    <td><%= @user.state %></td>
-  </tr>
-  <tr>
-    <td>Zip</td>
-    <td><%= @user.zip %></td>
-  </tr>
 </table>
 
+<br>
+
+<h3 class="mt-4 text-center">Addresses</h3>
+<center>
+  <table class="address-info">
+    <tr>
+      <th>Nickname</th>
+      <th>Street Address</th>
+      <th>City</th>
+      <th>State</th>
+      <th>Zip</th>
+    </tr>
+      <% @user.addresses.each do |address| %>
+      <tr>
+        <td><%= address.nickname %></td>
+        <td><%= address.address %></td>
+        <td><%= address.city %></td>
+        <td><%= address.state %></td>
+        <td><%= address.zip %></td>
+      </tr>
+      <% end %>
+  </table>
+</center>
 <article class="justify-content-center row mt-4">
   <% if !@user.orders.empty? %>
     <%= link_to 'Your Orders', user_orders_path, class: 'btn btn-success ml-2 mr-2' %>
@@ -40,6 +43,6 @@
   <% if !admin %>
     <%= link_to 'Edit Your Info', '/profile/edit', class: 'btn btn-primary ml-2 mr-2' %>
     <%= link_to 'Change Your Password', '/profile/edit?info=false', class: 'btn btn-danger ml-2 mr-2' %>
-    <%= link_to 'Addresses', '/profile/addresses', class: 'btn btn-success ml-2 mr-2' %>
+    <%= link_to 'Edit Address', '/profile/addresses', class: 'btn btn-success ml-2 mr-2' %>
   <% end %>
 </article>

@@ -5,8 +5,10 @@
       <h3 class="text-center"><%= address.nickname %></h3>
       <p class="text-center"><%= address.address %></P>
       <p class="text-center"><%= address.city %> <%= address.state %>, <%= address.zip %><p/>
-      <%= link_to 'Edit Address', "/profile/addresses/#{address.id}/edit", class: 'btn btn-success ml-2 mr-2' %>
-      <%= link_to 'Delete Address', "/profile/addresses/#{address.id}", method: :delete, class: 'btn btn-outline-danger mt-3' %>
+      <% unless address.shipped_orders? %>
+        <%= link_to 'Edit Address', "/profile/addresses/#{address.id}/edit", class: 'btn btn-success ml-2 mr-2' %>
+        <%= link_to 'Delete Address', "/profile/addresses/#{address.id}", method: :delete, class: 'btn btn-outline-danger mt-3' %>
+      <% end %>
     </section>
   <% end %>
 </section>

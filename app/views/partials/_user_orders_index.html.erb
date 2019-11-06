@@ -9,17 +9,28 @@
       <th scope="col">Current Status</th>
       <th scope="col">Number of Items</th>
       <th scope="col">Grand Total</th>
+      <th scope="col"></th>
     </tr>
   </thead>
   <tbody>
     <% @orders.each do |order| %>
       <tr id="order-<%= order.id %>">
-        <th scope="row"><%= link_to "#{order.id}", order_show_path + "#{order.id}" %></th>
+        <th scope="row"><%= link_to "#{order.id}", order_show_path + "#{order.id}", method: :get %></th>
         <td><%= order.created_at.strftime("%m/%d/%Y") %></td>
         <td><%= order.updated_at.strftime("%m/%d/%Y") %></td>
         <td><%= order.status.capitalize %></td>
         <td><%= order.item_orders.count %></td>
         <td><%= number_to_currency(order.grandtotal) %></td>
+          <% if order.pending? || order.packaged? %>
+            <article class="justify-content-center row">
+              <td><%= button_to 'Cancel Order', "/profile/orders/#{order.id}", method: :patch, class: 'btn btn-danger mt-4' %></td>
+            </article>
+          <% end %>
+          <% if order.pending? && !current_admin? %>
+            <article class="justify-content-center row">
+              <td><%= button_to 'Change Address', "/profile/orders/#{order.id}/edit", method: :get, class: 'btn btn-success mt-4' %></td>
+            </article>
+          <% end %>
       </tr>
     <% end %>
   </tbody>

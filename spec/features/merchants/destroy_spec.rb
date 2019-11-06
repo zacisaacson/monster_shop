@@ -4,6 +4,13 @@ RSpec.describe "As a visitor" do
   describe "When I visit a merchant show page" do
     before :each do
       @user = User.create!(name: "Gmoney", email: "test@gmail.com", password: "password123", password_confirmation: "password123")
+      @user_address = @user.addresses.create!(
+        nickname: 'Home',
+        address: '9247 E 42nd Avenue',
+        city: 'Rochester',
+        state: 'NY',
+        zip: 48231
+      )
       visit '/login'
       fill_in :email, with: 'test@gmail.com'
       fill_in :password, with: 'password123'
@@ -53,6 +60,12 @@ RSpec.describe "As a visitor" do
       click_on "Add Item to Cart"
 
       visit "/cart"
+      within "#addresses-#{@user_address.id}" do
+        click_link 'Select'
+      end
+
+      visit "/profile/orders/#{@user_address.id}/new"
+
       click_on "Checkout"
 
       visit "/merchants/#{meg.id}"

@@ -9,6 +9,7 @@ describe Order, type: :model do
     it {should have_many :item_orders}
     it {should have_many(:items).through(:item_orders)}
     it {should belong_to :user}
+    it {should belong_to :address}
   end
 
   describe 'instance methods' do
@@ -20,7 +21,14 @@ describe Order, type: :model do
       @pull_toy = @brian.items.create(name: "Pull Toy", description: "Great pull toy!", price: 10, image: "http://lovencaretoys.com/image/cache/dog/tug-toy-dog-pull-9010_2-800x800.jpg", inventory: 32)
 
       @user = User.create!(name: "Gmoney", email: "test@gmail.com", password: "password123", password_confirmation: "password123")
-      @order_1 = Order.create!(user_id: @user.id)
+      @user_address = @user.addresses.create!(
+        nickname: 'Home',
+        address: '9247 E 42nd Avenue',
+        city: 'Rochester',
+        state: 'NY',
+        zip: 48231
+      )
+      @order_1 = Order.create!(user_id: @user.id, address_id: @user_address.id)
 
       @order_1.item_orders.create!(item: @tire, price: @tire.price, quantity: 2)
       @order_1.item_orders.create!(item: @pull_toy, price: @pull_toy.price, quantity: 3)
@@ -38,10 +46,17 @@ describe Order, type: :model do
   describe 'status' do
     before :each do
       @user = User.create!(name: "Gmoney", email: "test@gmail.com", password: "password123", password_confirmation: "password123")
-      @order_1 = Order.create!(user_id: @user.id, status: 0)
-      @order_2 = Order.create!(user_id: @user.id)
-      @order_3 = Order.create!(user_id: @user.id, status: 2)
-      @order_4 = Order.create!(user_id: @user.id, status: 3)
+      @user_address = @user.addresses.create!(
+        nickname: 'Home',
+        address: '9247 E 42nd Avenue',
+        city: 'Rochester',
+        state: 'NY',
+        zip: 48231
+      )
+      @order_1 = Order.create!(user_id: @user.id, status: 0, address_id: @user_address.id)
+      @order_2 = Order.create!(user_id: @user.id, address_id: @user_address.id)
+      @order_3 = Order.create!(user_id: @user.id, status: 2, address_id: @user_address.id)
+      @order_4 = Order.create!(user_id: @user.id, status: 3, address_id: @user_address.id)
     end
 
     it 'can be created as a packaged order' do

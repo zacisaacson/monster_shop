@@ -32,6 +32,13 @@ describe Item, type: :model do
       @review_4 = @chain.reviews.create(title: "Not too impressed", content: "v basic bike shop", rating: 2)
       @review_5 = @chain.reviews.create(title: "Okay place :/", content: "Brian's cool and all but just an okay selection of items", rating: 3)
       @user = User.create!(name: "Gmoney", email: "test@gmail.com", password: "password123", password_confirmation: "password123")
+      @user_address = @user.addresses.create!(
+        nickname: 'Home',
+        address: '9247 E 42nd Avenue',
+        city: 'Rochester',
+        state: 'NY',
+        zip: 48231
+      )
     end
 
     it "calculate average review" do
@@ -48,14 +55,14 @@ describe Item, type: :model do
 
     it 'no orders' do
       expect(@chain.no_orders?).to eq(true)
-      order = Order.create(user_id: @user.id)
+      order = Order.create(user_id: @user.id, address_id: @user_address.id)
       order.item_orders.create(item: @chain, price: @chain.price, quantity: 2)
       expect(@chain.no_orders?).to eq(false)
     end
 
     it 'can find the quantity ordered of an item' do
-      order_1 = Order.create!(user_id: @user.id)
-      order_2 = Order.create!(user_id: @user.id)
+      order_1 = Order.create!(user_id: @user.id, address_id: @user_address.id)
+      order_2 = Order.create!(user_id: @user.id, address_id: @user_address.id)
 
       order_1.item_orders.create!(item_id: @chain.id, price: @chain.price, quantity: 7)
       order_2.item_orders.create!(item_id: @chain.id, price: @chain.price, quantity: 3)
@@ -90,7 +97,14 @@ describe Item, type: :model do
       @dog_bowl = @brian.items.create(name: "Dog Bowl", description: "They'll love it!", price: 21, image: "https://img.chewy.com/is/image/catalog/54226_MAIN._AC_SL1500_V1534449573_.jpg", active?: false, inventory: 21)
 
       @user = User.create!(name: "Gmoney", email: "test@gmail.com", password: "password123", password_confirmation: "password123")
-      @order_1 = Order.create!(user_id: @user.id)
+      @user_address = @user.addresses.create!(
+        nickname: 'Home',
+        address: '9247 E 42nd Avenue',
+        city: 'Rochester',
+        state: 'NY',
+        zip: 48231
+      )
+      @order_1 = Order.create!(user_id: @user.id, address_id: @user_address.id)
 
       @order_1.item_orders.create!(item_id: @chain.id, price: @chain.price, quantity: 7)
       @order_1.item_orders.create!(item_id: @dog_bowl.id, price: @dog_bowl.price, quantity: 6)

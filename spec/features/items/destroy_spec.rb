@@ -30,10 +30,17 @@ RSpec.describe 'item delete', type: :feature do
     it 'I can not delete items with orders' do
       user = User.create!(name: "Gmoney", email: "test@gmail.com", password: "password123", password_confirmation: "password123")
 
+      user_address = user.addresses.create!(
+        nickname: 'Home',
+        address: "452 Cherry St",
+        city: "Tucson",
+        state: "AZ",
+        zip: 85736
+      )
       bike_shop = Merchant.create(name: "Brian's Bike Shop", address: '123 Bike Rd.', city: 'Denver', state: 'CO', zip: 80203)
       chain = bike_shop.items.create(name: "Chain", description: "It'll never break!", price: 50, image: "https://www.rei.com/media/b61d1379-ec0e-4760-9247-57ef971af0ad?size=784x588", inventory: 5)
       review_1 = chain.reviews.create(title: "Great place!", content: "They have great bike stuff and I'd recommend them to anyone.", rating: 5)
-      order_1 = Order.create!(user_id: user.id)
+      order_1 = Order.create!(user_id: user.id, address_id: user_address.id)
       order_1.item_orders.create!(item: chain, price: chain.price, quantity: 2)
 
       visit "/items/#{chain.id}"

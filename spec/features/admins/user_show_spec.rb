@@ -3,7 +3,14 @@ require 'rails_helper'
 RSpec.describe 'Admin User Show Page', type: :feature do
   before :each do
     @user = User.create(name: "Andy Dwyer", email: "user@gmail.com", password: "password", password_confirmation: "password")
-    @user.orders.create!
+    @user_address = @user.addresses.create!(
+      nickname: 'Home',
+      address: '9247 E 42nd Avenue',
+      city: 'Rochester',
+      state: 'NY',
+      zip: 48231
+    )
+    @user.orders.create!(address_id: @user_address.id)
     @admin = User.create(name: "Ron Swanson", email: "admin@gmail.com", password: "password", password_confirmation: "password", role: 3)
 
     visit '/login'
@@ -16,14 +23,16 @@ RSpec.describe 'Admin User Show Page', type: :feature do
 
   it 'shows all user info but no edit link' do
     visit "/admin/users/#{@user.id}"
-
     within '.profile-info' do
       expect(page).to have_content(@user.name)
-      expect(page).to have_content(@user.address)
-      expect(page).to have_content(@user.city)
-      expect(page).to have_content(@user.state)
-      expect(page).to have_content(@user.zip)
       expect(page).to have_content(@user.email)
+    end
+
+    within '.address-info' do
+      expect(page).to have_content(@user_address.address)
+      expect(page).to have_content(@user_address.city)
+      expect(page).to have_content(@user_address.state)
+      expect(page).to have_content(@user_address.zip)
     end
 
     expect(page).to_not have_link('Edit Your Info')

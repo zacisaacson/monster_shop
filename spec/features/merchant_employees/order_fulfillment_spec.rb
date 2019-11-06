@@ -4,13 +4,20 @@ RSpec.describe 'When I visit an order show page as a merchant employee' do
   before :each do
     @user = User.create!(name: "Gmoney", email: "test@gmail.com", password: "password123", password_confirmation: "password123")
 
+    @user_address = @user.addresses.create!(
+      nickname: 'Home',
+      address: "452 Cherry St",
+      city: "Tucson",
+      state: "AZ",
+      zip: 85736
+    )
     @mike = Merchant.create(name: "Mike's Print Shop", address: '123 Paper Rd', city: 'Denver', state: 'CO', zip: 80203)
     @meg = Merchant.create(name: "Meg's Bike Shop", address: '123 Bike Rd', city: 'Denver', state: 'CO', zip: 80203)
     @tire = @meg.items.create(name: "Gatorskins", description: "They'll never pop!", price: 100, image: "https://www.rei.com/media/4e1f5b05-27ef-4267-bb9a-14e35935f218?size=784x588", inventory: 12)
     @paper = @mike.items.create(name: "Lined Paper", description: "Great for writing on!", price: 20, image: "https://cdn.vertex42.com/WordTemplates/images/printable-lined-paper-wide-ruled.png", inventory: 4)
     @pencil = @mike.items.create(name: "Yellow Pencil", description: "You can write on paper with it!", price: 2, image: "https://images-na.ssl-images-amazon.com/images/I/31BlVr01izL._SX425_.jpg", inventory: 100)
 
-    @order = Order.create!(user_id: @user.id)
+    @order = Order.create!(user_id: @user.id, address_id: @user_address.id)
     @order.item_orders.create!(item_id: @tire.id, price: @tire.price, quantity: 7)
     @order.item_orders.create!(item_id: @pencil.id, price: @pencil.price, quantity: 104)
     @order.item_orders.create!(item_id: @paper.id, price: @paper.price, quantity: 3)
@@ -33,7 +40,7 @@ RSpec.describe 'When I visit an order show page as a merchant employee' do
 
     within '#customer-info' do
       expect(page).to have_content('Gmoney')
-      expect(page).to have_content("123 Lincoln St Denver, CO 23840")
+      expect(page).to have_content("452 Cherry St Tucson, AZ 85736")
     end
 
     within "#item-#{@paper.id}" do
@@ -113,7 +120,7 @@ RSpec.describe 'When I visit an order show page as a merchant employee' do
   it 'changes order status to packaged if all items are fulfilled' do
     click_link 'Logout'
 
-    order = Order.create!(user_id: @user.id)
+    order = Order.create!(user_id: @user.id, address_id: @user_address.id)
     order.item_orders.create!(item_id: @tire.id, price: @tire.price, quantity: 7)
     order.item_orders.create!(item_id: @pencil.id, price: @pencil.price, quantity: 50)
 

@@ -1,3 +1,5 @@
+require 'rails_helper'
+
 RSpec.describe("Order Creation") do
   describe "When I check out from my cart" do
     before(:each) do
@@ -17,6 +19,13 @@ RSpec.describe("Order Creation") do
       click_on "Add Item to Cart"
 
       @user = User.create!(name: "Gmoney", email: "test@gmail.com", password: "password123", password_confirmation: "password123")
+      @user_address = @user.addresses.create!(
+        nickname: 'Home',
+        address: "452 Cherry St",
+        city: "Tucson",
+        state: "AZ",
+        zip: 85736
+      )
       visit '/login'
       fill_in :email, with: 'test@gmail.com'
       fill_in :password, with: 'password123'

@@ -6,9 +6,15 @@ class UsersController < ApplicationController
   def create
     @user = User.new(user_params)
     if @user.save
-      flash[:success] = ["Congratulations #{@user.name}, you have registered and are now logged in!"]
-      session[:user_id] = @user.id
-      redirect_to '/profile'
+      @address = @user.addresses.create(nickname: 'Home', address: params[:address], city: params[:city], state: params[:state], zip: params[:zip])
+      if @address.save
+        flash[:success] = ["Congratulations #{@user.name}, you have registered and are now logged in!"]
+        session[:user_id] = @user.id
+        redirect_to '/profile'
+      else
+        flash.now[:error] = @address.errors.full_messages.uniq
+        render :new
+      end
     else
       flash.now[:error] = @user.errors.full_messages.uniq
       render :new
@@ -58,6 +64,7 @@ class UsersController < ApplicationController
   private
 
   def user_params
-    params.permit(:name, :address, :city, :state, :zip, :email, :password, :password_confirmation)
+    params.permit(:name, :email, :password, :password_confirmation)
   end
+
 end

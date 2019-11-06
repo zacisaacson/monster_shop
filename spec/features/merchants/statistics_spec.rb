@@ -1,9 +1,3 @@
-# As a visitor
-# When I visit a merchant's show page
-# I see statistics for that merchant, including:
-# - count of items for that merchant
-# - average price of that merchant's items
-# - Distinct cities where my items have been ordered
 require 'rails_helper'
 
 RSpec.describe 'merchant show page', type: :feature do
@@ -18,9 +12,24 @@ RSpec.describe 'merchant show page', type: :feature do
 
       @user = User.create!(name: "Gmoney", email: "test@gmail.com", password: "password123", password_confirmation: "password123")
       @user_1 = User.create!(name: "Gmoney", email: "test1@gmail.com", password: "password123", password_confirmation: "password123")
-      @order_1 = Order.create!(user_id: @user.id)
-      @order_2 = Order.create!(user_id: @user_1.id)
-      @order_3 = Order.create!(user_id: @user.id)
+      @user_address = @user.addresses.create!(
+        nickname: 'Home',
+        address: "452 Cherry St",
+        city: "Tucson",
+        state: "AZ",
+        zip: 85736
+      )
+
+      @user_1_address = @user_1.addresses.create!(
+        nickname: 'Home',
+        address: '9247 E 42nd Avenue',
+        city: 'Rochester',
+        state: 'NY',
+        zip: 48231
+      )
+      @order_1 = Order.create!(user_id: @user.id, address_id: @user_address.id)
+      @order_2 = Order.create!(user_id: @user_1.id, address_id: @user_1_address.id)
+      @order_3 = Order.create!(user_id: @user.id, address_id: @user_address.id)
 
       @order_1.item_orders.create!(item: @tire, price: @tire.price, quantity: 2)
       @order_1.item_orders.create!(item: @pull_toy, price: @pull_toy.price, quantity: 3)
@@ -38,12 +47,10 @@ RSpec.describe 'merchant show page', type: :feature do
         expect(page).to have_content("Average Price of Items: $15")
         within ".distinct-cities" do
           expect(page).to have_content("Cities that order these items:")
-          expect(page).to have_content("Hershey")
-          expect(page).to have_content("Denver")
+          expect(page).to have_content("Tucson")
+          expect(page).to have_content("Rochester")
         end
       end
-
-
     end
   end
 end

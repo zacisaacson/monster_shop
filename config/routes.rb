@@ -24,6 +24,7 @@ Rails.application.routes.draw do
   get '/profile', to: 'users#show'
   get '/profile/orders', to: 'user_orders#index'
   get '/profile/orders/:id', to: 'user_orders#show'
+  get '/profile/orders/:address_id/new', to: 'user_orders#new'
   get '/register', to: 'users#new'
   post '/users', to: 'users#create'
   get '/profile/edit', to: 'users#edit'

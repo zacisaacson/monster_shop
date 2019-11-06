@@ -18,6 +18,13 @@ RSpec.describe 'Cart show' do
       @items_in_cart = [@paper,@tire,@pencil]
 
       @user = User.create!(name: "Gmoney", email: "test@gmail.com", password: "password123", password_confirmation: "password123")
+      @user_address = @user.addresses.create!(
+        nickname: 'Home',
+        address: '9247 E 42nd Avenue',
+        city: 'Rochester',
+        state: 'NY',
+        zip: 48231
+      )
       visit '/login'
       fill_in :email, with: 'test@gmail.com'
       fill_in :password, with: 'password123'

@@ -7,6 +7,17 @@ RSpec.describe 'As a default user' do
     @home = @user.addresses.create!(nickname: "Home" , address: "400 Washington St", city: "Denver" , state: "CO", zip: 89233 )
     @parents = @user.addresses.create!(nickname: "Parents" , address: "4739 N Wilshire Dr", city: "Phoenix" , state: "AZ", zip: 84839 )
 
+    @mike = Merchant.create(name: "Mike's Print Shop", address: '123 Paper Rd.', city: 'Denver', state: 'CO', zip: 80203)
+    @meg = Merchant.create(name: "Meg's Bike Shop", address: '123 Bike Rd.', city: 'Denver', state: 'CO', zip: 80203)
+    @tire = @meg.items.create(name: "Gatorskins", description: "They'll never pop!", price: 100, image: "https://www.rei.com/media/4e1f5b05-27ef-4267-bb9a-14e35935f218?size=784x588", inventory: 12)
+    @paper = @mike.items.create(name: "Lined Paper", description: "Great for writing on!", price: 20, image: "https://cdn.vertex42.com/WordTemplates/images/printable-lined-paper-wide-ruled.png", inventory: 3)
+    @pencil = @mike.items.create(name: "Yellow Pencil", description: "You can write on paper with it!", price: 2, image: "https://images-na.ssl-images-amazon.com/images/I/31BlVr01izL._SX425_.jpg", inventory: 100)
+
+    @order_1 = Order.create!(user_id: @user.id, address_id: @work.id)
+    @order_2 = Order.create!(user_id: @user.id, address_id: @home.id, status: 2)
+    @order_1.item_orders.create!(item_id: @tire.id, price: @tire.price, quantity: 2)
+    @order_1.item_orders.create!(item_id: @paper.id, price: @paper.price, quantity: 1)
+
     visit '/login'
 
     fill_in :email, with: 'test@gmail.com'
@@ -18,7 +29,7 @@ RSpec.describe 'As a default user' do
   it "can index all addresses" do
     visit '/profile'
 
-    click_link 'Addresses'
+    click_link 'Edit Address'
 
     expect(current_path).to eq('/profile/addresses')
 
@@ -143,6 +154,34 @@ RSpec.describe 'As a default user' do
 
     expect(current_path).to eq('/profile/addresses')
 
-    expect(page).to_not have_content('Work')
+    expect("addresses-#{@work.id}").to be_present
+  end
+
+  it "can edit an address that hasnt been shipped" do
+    visit '/profile/orders'
+
+    within "#order-#{@order_1.id}" do
+      click_button "Change Address"
+    end
+
+    expect(current_path).to eq("/profile/orders/#{@order_1.id}/edit")
+
+    within "#addresses-#{@work.id}" do
+      click_link 'Select'
+    end
+
+    expect(current_path).to eq("/profile")
+
+    expect(page).to have_content('Your address has been updated')
+
+  end
+
+  it "cannot edit an address that has been shipped" do
+    visit '/profile/orders'
+
+    within "#order-#{@order_2.id}" do
+      expect(page).to_not have_link('Change Address')
+    end
+
   end
 end

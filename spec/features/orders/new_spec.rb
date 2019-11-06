@@ -32,6 +32,11 @@ RSpec.describe("Order Creation") do
       click_button 'Login'
 
       visit "/cart"
+
+      within "#addresses-#{@user_address.id}" do
+        click_on 'Select'
+      end
+
       click_on "Checkout"
     end
 

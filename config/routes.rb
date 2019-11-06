@@ -19,17 +19,21 @@ Rails.application.routes.draw do
   delete '/cart/:item_id', to: 'cart#remove_item'
   patch '/cart/:item_id/:increment_decrement', to: 'cart#increment_decrement'
 
-  post '/profile/orders', to: 'user_orders#create'
-
-  get '/profile', to: 'users#show'
   get '/profile/orders', to: 'user_orders#index'
   get '/profile/orders/:id', to: 'user_orders#show'
   get '/profile/orders/:address_id/new', to: 'user_orders#new'
+  post '/profile/orders/:address_id', to: 'user_orders#create'
+  get '/profile/orders/:id/edit', to: 'user_orders#edit'
+  patch '/profile/orders/:id/addresses/:address_id', to: 'user_orders#update'
+  patch '/profile/orders/:id', to: 'user_orders#cancel'
+
+
+  get '/profile', to: 'users#show'
   get '/register', to: 'users#new'
   post '/users', to: 'users#create'
   get '/profile/edit', to: 'users#edit'
   patch '/profile', to: 'users#update'
-  patch '/profile/orders/:id', to: 'user_orders#update'
+
 
   get '/profile/addresses', to: 'addresses#index'
   get '/profile/addresses/:id/edit', to: 'addresses#edit'

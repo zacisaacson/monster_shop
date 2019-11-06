@@ -42,16 +42,26 @@
 
   <section class='container-fluid justify-content-center d-flex mt-4'>
     <p><%= link_to "Empty Cart", "/cart", method: :delete, class: 'btn btn-danger ml-2 mr-2' %></p>
-    <% if current_user %>
-      <p><%= link_to "Checkout", "/profile/orders", method: :post, class: 'btn btn-success ml-2 mr-2' %></p>
-      </section>
-    <% else %>
-      </section>
-      <section id='cart-logged-out-warning'>
-        <h6 class='text-center'>You must <%= link_to 'register', '/register' %> and <%= link_to 'login', '/login' %> in order to complete checkout process.</h6>
-        <br>
-      </section>
-    <% end %>
-<% else %>
-  <h3 align="center">Cart is currently empty</h3>
-<% end %>
+    <h1>Address</h1>
+    <section class="container-fluid row justify-content-center">
+      <% if current_user && !@addresses.empty? %>
+        <% @addresses.each do |address| %>
+          <section class = "card card-body bg-light m-3 p-4 col-md-3" id= 'addresses-<%=address.id%>'>
+            <h3 class="text-center"><%= address.nickname %></h3>
+            <p class="text-center"><%= address.address %></P>
+            <p class="text-center"><%= address.city %> <%= address.state %>, <%= address.zip %><p/>
+            <%= link_to 'Select', "/profile/orders/#{address.id}/new", class: 'btn btn-success ml-2 mr-2' %>
+          </section>
+        <% end %>
+      <% elsif current_user && @addresses.empty? %>
+        <h5 align="center">Please add an <%= link_to 'address', '/profile/addresses/new' %> to checkout</h5>
+      <% else %>
+        <section id='cart-logged-out-warning'>
+          <h5 class='text-center'>You must <%= link_to 'register', '/register' %> and <%= link_to 'login', '/login' %> in order to complete checkout process.</h5>
+          <br>
+        </section>
+      <% end %>
+    </section>
+  <% else %>
+    <h3 align="center">Cart is currently empty</h3>
+  <% end %>

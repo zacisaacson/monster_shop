@@ -3,15 +3,42 @@ Rails.application.routes.draw do
 
   root 'items#index'
 
-  resources :merchants do
-    resources :items, only: [:index, :new, :create]
-  end
+  # resources :merchants do
+  #   resources :items, only: [:index, :new, :create]
+  # end
 
-  resources :items, except: [:new, :create] do
-    resources :reviews, only: [:new, :create]
-  end
+  get '/merchants', to: 'merchants#index'
+  post '/merchants', to: 'merchants#create'
+  get '/merchants/new', to: 'merchants#new'
 
-  resources :reviews, only: [:edit, :update, :destroy]
+  get '/merchants/:id', to: 'merchants#show'
+  get '/merchants/:id/edit', to: 'merchants#edit'
+  patch '/merchants/:id', to: 'merchants#update'
+  delete '/merchants/:id', to: 'merchants#destroy'
+
+  get '/merchants/:merchant_id/items', to: 'items#index'
+  post '/merchants/:merchant_id/items', to: 'items#create'
+  get '/merchants/:merchant_id/items/new', to: 'items#new'
+
+
+  # resources :items, except: [:new, :create] do
+  #   resources :reviews, only: [:new, :create]
+  # end
+
+  get '/items', to: 'items#index'
+  get '/items/:id/edit', to: 'items#edit'
+  get '/items/:id', to: 'items#show'
+  patch '/items/:id', to: 'items#update'
+  delete '/items/:id', to: 'items#destroy'
+
+  post '/items/:item_id/reviews', to: 'reviews#create'
+  get '/items/:item_id/reviews/new', to: 'reviews#new'
+
+  # resources :reviews, only: [:edit, :update, :destroy]
+
+  get '/reviews/:id/edit', to: 'reviews#edit'
+  patch '/reviews/:id', to: 'reviews#update'
+  delete '/reviews/:id', to: 'reviews#destroy'
 
   post '/cart/:item_id', to: 'cart#add_item'
   get '/cart', to: 'cart#show'
@@ -47,7 +74,15 @@ Rails.application.routes.draw do
   get '/logout', to: 'sessions#destroy'
 
   namespace :merchant do
-    resources :items, except: [:show]
+    # resources :items, except: [:show]
+
+    get '/items', to: 'items#index'
+    post '/items', to: 'items#create'
+    get '/items/new', to: 'items#new'
+    get '/items/:id/edit', to: 'items#edit'
+    patch '/items/:id', to: 'items#update'
+    delete '/items/:id', to: 'items#destroy'
+
 
     root 'dashboard#index'
 
@@ -56,7 +91,10 @@ Rails.application.routes.draw do
   end
 
   namespace :admin do
-    resources :users, only: [:index, :show]
+    # resources :users, only: [:index, :show]
+
+    get '/users', to: 'users#index'
+    get '/users/:id', to: 'users#show'
 
     root 'dashboard#index'
 

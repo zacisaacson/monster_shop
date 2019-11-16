@@ -21,11 +21,10 @@ class UserOrdersController < ApplicationController
   def update
     order = Order.find(params[:id])
     order.update(address_id: params[:address_id])
-      if order.save
-        flash[:success] = ['Your address has been updated']
-        redirect_to '/profile'
-      end
-
+    if order.save
+      flash[:success] = ['Your address has been updated']
+      redirect_to '/profile'
+    end
   end
 
   def cancel
@@ -44,7 +43,6 @@ class UserOrdersController < ApplicationController
   end
 
   def new
-  # binding.pry
   @address = Address.find(params[:address_id])
   end
 
